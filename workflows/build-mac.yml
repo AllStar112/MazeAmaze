@@ -1,0 +1,30 @@
+name: Build for macOS
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Biar bisa di-run manual dari website
+
+jobs:
+  build:
+    runs-on: macos-latest  # Menggunakan Mac virtual dari GitHub
+    
+    steps:
+    # 1. Checkout kode dari repo
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    # 2. Compile C++ ke executable Mac
+    - name: Compile C++ program
+      run: |
+        g++ -std=c++17 -O2 MazeAmaze -o MazeAmaze_mac
+    
+    # 3. Upload hasilnya sebagai artifact (file yang bisa di-download)
+    - name: Upload executable
+      uses: actions/upload-artifact@v4
+      with:
+        name: mac-executable
+        path: MazeAmaze_mac
+        # Ini akan menghasilkan file myapp_mac yang bisa di-download
